@@ -20,8 +20,10 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: "Flutter's Clothing",
             theme: ThemeData(
+              iconTheme: IconThemeData(color: Colors.white),
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue,
-                  primary: Color.fromARGB(255, 4, 125, 141)
+                  primary: Color.fromARGB(255, 4, 125, 141),
+
               ),
             ),
             debugShowCheckedModeBanner: false,
