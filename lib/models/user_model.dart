@@ -64,7 +64,7 @@ class UserModel extends Model {
   }
   Future _savaUserData(Map<String, dynamic> userData, UserCredential user) async {
     this.userData = userData;
-    FirebaseFirestore.instance.collection("users_online_store").doc().set(userData);
+    FirebaseFirestore.instance.collection("users_online_store").doc(user.user!.uid).set(userData);
   }
 
 }
