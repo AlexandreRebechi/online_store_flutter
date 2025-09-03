@@ -18,6 +18,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
 
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,10 +137,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
   void _onSuccess(){
+   ScaffoldMessenger.of(context).showSnackBar(
+     SnackBar(content: Text("Usuário criado com sucesso!"),
+       backgroundColor: Theme.of(context).primaryColor,
+       duration: Duration(seconds: 2),
+
+     )
+   );
+   Future.delayed(Duration(seconds: 2)).then((_){
+     Navigator.of(context).pop();
+   });
 
   }
 
   void _onFail(){
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Falha ao criar usuário!"),
+          backgroundColor: Colors.redAccent,
+          duration: Duration(seconds: 2),
+
+        )
+    );
 
   }
 }

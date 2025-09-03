@@ -14,13 +14,19 @@ class UserModel extends Model {
   // procesando o login
   bool isLoading = false;
 
-  // login
-  void signUp ({
+  @override
+  void addListener(VoidCallback listener) {
+    super.addListener(listener);
+
+    _loadCurrentUser();
+  } // login
+
+  void signUp({
     required Map<String, dynamic> userData,
     required String pass,
     required VoidCallback onSuccess,
     required VoidCallback onFail,
-  }) async{
+  }) {
     isLoading = true;
     notifyListeners();
 
@@ -29,13 +35,14 @@ class UserModel extends Model {
           email: userData['email'],
           password: pass,
         )
-        .then((user){
+        .then((user) async {
           firebaseUser = user.user;
 
-          _savaUserData(userData, user);
+          await _savaUserData(userData);
 
           onSuccess();
           isLoading = false;
+          notifyListeners();
         })
         .catchError((e) {
           onFail();
@@ -45,26 +52,71 @@ class UserModel extends Model {
   }
 
   // signup
-  void signIn() async {
+  void signIn({
+    required String email,
+    required String pass,
+    required VoidCallback onSuccess,
+    required VoidCallback onFail,
+  }) async {
     isLoading = true;
     notifyListeners();
 
-    await Future.delayed(Duration(seconds: 3));
+    _auth
+        .signInWithEmailAndPassword(email: email, password: pass)
+        .then((user) async {
+          firebaseUser = user.user;
 
-    isLoading = false;
+          await _loadCurrentUser();
+
+          onSuccess();
+          isLoading = false;
+          notifyListeners();
+        })
+        .catchError((e) {
+          onFail();
+          isLoading = false;
+          notifyListeners();
+        });
+  }
+
+  void signOut() async {
+    await _auth.signOut();
+
+    userData = Map();
+    firebaseUser = null;
+
     notifyListeners();
   }
 
   // recuperar senha
-  void recoverPass() {}
+  void recoverPass(String email) {
+    _auth.sendPasswordResetEmail(email: email);
+
+  }
 
   //está logado
   bool isLoggedIn() {
-    return true;
-  }
-  Future _savaUserData(Map<String, dynamic> userData, UserCredential user) async {
-    this.userData = userData;
-    FirebaseFirestore.instance.collection("users_online_store").doc(user.user!.uid).set(userData);
+    return FirebaseAuth.instance.currentUser != null;
   }
 
+  Future _savaUserData(Map<String, dynamic> userData) async {
+    this.userData = userData;
+    FirebaseFirestore.instance
+        .collection("users_online_store")
+        .doc(firebaseUser!.uid)
+        .set(userData);
+  }
+
+  Future _loadCurrentUser() async {
+    firebaseUser ??= _auth.currentUser;
+    if (firebaseUser != null) {
+      DocumentSnapshot<Map<String, dynamic>> docUser = await FirebaseFirestore
+          .instance
+          .collection("users_online_store")
+          .doc(firebaseUser!.uid)
+          .get();
+      userData = docUser.data.call();
+    }
+    notifyListeners();
+  }
 }
