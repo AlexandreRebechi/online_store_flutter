@@ -1,6 +1,11 @@
 import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:online_store/datas/cart_product.dart';
 import 'package:online_store/datas/product_data.dart';
+import 'package:online_store/models/cart_model.dart';
+import 'package:online_store/models/user_model.dart';
+import 'package:online_store/screens/cart_screen.dart';
+import 'package:online_store/screens/login_screen.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key, required this.product});
@@ -24,6 +29,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text(product.title!, style: TextStyle(color: Colors.white)),
         backgroundColor: Theme.of(context).primaryColor,
         centerTitle: true,
@@ -112,17 +118,39 @@ class _ProductScreenState extends State<ProductScreen> {
                       backgroundColor: primaryColor,
                       //widget ajustar as bortas do botão
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6.0)
+                        borderRadius: BorderRadius.circular(10.0)
                       )
 
 
 
                     ),
                     //widget função do botão
-                    onPressed: size != null ? () {} : null,
+                    onPressed: size != null ? () {
+                      if(UserModel.of(context).isLoggedIn()){
+                        // adicionar ao carrinho
+                        CartProduct cartProduct = CartProduct();
+                        cartProduct.size = size;
+                        cartProduct.quantity = 1;
+                        cartProduct.pid = product.id;
+                        cartProduct.category = product.category;
+
+
+                        CartModel.of(context).addCartItem(cartProduct);
+
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context)=>CartScreen())
+                        );
+
+                      } else {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context)=>LoginScreen())
+                        );
+                      }
+
+                    } : null,
                     //widget texto do botão
                     child: Text(
-                      "Adicionar ao Carrinho",
+                      UserModel.of(context).isLoggedIn() ? "Adicionar ao Carrinho" : "Entre para Comprar",
                       style: TextStyle(fontSize: 18.0, color: Colors.white),
                     ),
                   ),

@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart';
+import 'package:online_store/datas/correios_frete.dart';
+import 'package:http/http.dart' as http;
+
+class ShipCard extends StatelessWidget {
+  const ShipCard({super.key});
+
+  /*calcFrete() {
+    double altura = 5.0;
+    double largura = 20.0;
+    double comprimento = 20.0;
+    double pesoReal = 10.0;
+
+    double pesoCubado = (comprimento * largura * altura) / 6000;
+    double pesoTaxavel = max(pesoReal, pesoCubado);
+    double frete;
+
+    frete = 20 + (pesoTaxavel * 2);
+
+    return frete;
+  }*/
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      child: ExpansionTile(
+        title: Text(
+          "Cálcular Frete",
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: Colors.grey[700],
+          ),
+        ),
+        leading: Icon(Icons.location_on),
+        children: [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: TextFormField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: "Digite seu CEP",
+              ),
+              initialValue: "",
+              onFieldSubmitted: (String cepDigitado) async {
+                try {
+                  http.Response response = await http.get(
+                    Uri.parse("https://viacep.com.br/ws/$cepDigitado/json/"),
+                  );
+                  print(response.body);
+
+                  if (response.statusCode == 200) {
+                    Correios correios = Correios.fromJson(response.body);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "Valor do Frete: R\$ ${correios.calcFrete()} \nCep: ${correios.cep} \nBairro: ${correios.bairro} \nLocaliadade: ${correios.localidade} \nUF: ${correios.uf}",
+                        ),
+                        backgroundColor: Theme.of(context).primaryColor,
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "Erro de conexão: ${response.statusCode}",
+                        ),
+                        backgroundColor: Colors.redAccent,
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  print("Erro na requisição: $e");
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

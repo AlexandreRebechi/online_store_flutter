@@ -13,6 +13,8 @@ class UserModel extends Model {
 
   // procesando o login
   bool isLoading = false;
+  
+  static UserModel of(BuildContext context) => ScopedModel.of<UserModel>(context);
 
   @override
   void addListener(VoidCallback listener) {
