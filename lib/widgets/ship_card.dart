@@ -5,21 +5,6 @@ import 'package:http/http.dart' as http;
 class ShipCard extends StatelessWidget {
   const ShipCard({super.key});
 
-  /*calcFrete() {
-    double altura = 5.0;
-    double largura = 20.0;
-    double comprimento = 20.0;
-    double pesoReal = 10.0;
-
-    double pesoCubado = (comprimento * largura * altura) / 6000;
-    double pesoTaxavel = max(pesoReal, pesoCubado);
-    double frete;
-
-    frete = 20 + (pesoTaxavel * 2);
-
-    return frete;
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -55,7 +40,7 @@ class ShipCard extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          "Valor do Frete: R\$ ${correios.calcFrete()} \nCep: ${correios.cep} \nBairro: ${correios.bairro} \nLocaliadade: ${correios.localidade} \nUF: ${correios.uf}",
+                          "Cep: ${correios.cep} \nBairro: ${correios.bairro} \nLocaliadade: ${correios.localidade} \nUF: ${correios.uf}",
                         ),
                         backgroundColor: Theme.of(context).primaryColor,
                       ),

@@ -15,8 +15,8 @@ class Correios {
   String? siafi;
 
   double altura = 5.0;
-  double largura = 20.0;
-  double comprimento = 20.0;
+  double largura = 12.0;
+  double comprimento = 17.0;
   double pesoReal = 10.0;
 
   Correios({
@@ -52,16 +52,6 @@ factory Correios.fromMap(Map<String, dynamic> json) =>
           ddd: json["ddd"],
           siafi: json["siafi"]
       );
-
-  calcFrete() {
-    double pesoCubado = (comprimento * largura * altura) / 6000;
-    double pesoTaxavel = max(pesoReal, pesoCubado);
-    double frete;
-
-    frete = 20 + (pesoTaxavel * 2);
-
-    return frete;
-  }
 
   Map<String, dynamic> toMap() => {
       'Cep': cep,

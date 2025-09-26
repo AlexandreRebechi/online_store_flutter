@@ -21,7 +21,7 @@ class CategoryScreen extends StatelessWidget {
           ),
           centerTitle: true,
           iconTheme: IconThemeData(color: Colors.white),
-          bottom: TabBar(
+          bottom: const TabBar(
             indicatorColor: Colors.white,
             tabs: <Widget>[
               Tab(icon: Icon(Icons.grid_on, color: Colors.white)),
@@ -37,14 +37,14 @@ class CategoryScreen extends StatelessWidget {
               .get(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else {
               return TabBarView(
                 physics: NeverScrollableScrollPhysics(),
                 children: [
                   GridView.builder(
-                    padding: EdgeInsets.all(4.0),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    padding: const EdgeInsets.all(4.0),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 4.0,
                       crossAxisSpacing: 4.0,
@@ -60,7 +60,7 @@ class CategoryScreen extends StatelessWidget {
                     },
                   ),
                   ListView.builder(
-                    padding: EdgeInsets.all(4.0),
+                    padding: const EdgeInsets.all(4.0),
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       ProductData data = ProductData.fromDocument(

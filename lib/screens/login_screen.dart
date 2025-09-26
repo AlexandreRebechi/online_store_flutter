@@ -25,7 +25,7 @@ final _formKey = GlobalKey<FormState>();
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
-      title: Text("Entrar", style: TextStyle(color: Colors.white)),
+      title: const Text("Entrar", style: TextStyle(color: Colors.white)),
       iconTheme: IconThemeData(color: Colors.white),
       centerTitle: true,
       backgroundColor: Theme.of(context).primaryColor,
@@ -33,10 +33,10 @@ Widget build(BuildContext context) {
         TextButton(
           onPressed: () {
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => SignUpScreen()),
+              MaterialPageRoute(builder: (context) => const SignUpScreen()),
             );
           },
-          child: Text(
+          child: const Text(
             "CRIAR CONTA",
             style: TextStyle(fontSize: 15.0, color: Colors.white),
           ),
@@ -46,16 +46,16 @@ Widget build(BuildContext context) {
     body: ScopedModelDescendant<UserModel>(
       builder: (context, child, model) {
         if (model.isLoading) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
         return Form(
           key: _formKey,
           child: ListView(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             children: <Widget>[
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(hintText: "E-mail"),
+                decoration: const InputDecoration(hintText: "E-mail"),
                 keyboardType: TextInputType.emailAddress,
                 validator: (text) {
                   if (text!.isEmpty || !text.contains("@")) {
@@ -65,10 +65,10 @@ Widget build(BuildContext context) {
                   }
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextFormField(
                 controller: _passController,
-                decoration: InputDecoration(hintText: "Senha"),
+                decoration: const InputDecoration(hintText: "Senha"),
                 obscureText: true,
                 validator: (text) {
                   if (text!.isEmpty || text.length < 6) {
@@ -85,10 +85,10 @@ Widget build(BuildContext context) {
                   child: TextButton(
                     onPressed: () {
                       if(_emailController.text.isEmpty){
-                        ScaffoldMessenger.of(context).showSnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(const
                             SnackBar(content: Text("Insira seu e-mail para recuperação"),
                               backgroundColor: Colors.redAccent,
-                              duration: Duration(seconds: 2),
+                              duration: Duration(seconds: 3),
 
                             )
                         );
@@ -96,15 +96,15 @@ Widget build(BuildContext context) {
                       } else {
                         model.recoverPass(_emailController.text);
                         ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Confira seu e-mail!"),
+                            SnackBar(content: const Text("Confira seu e-mail!"),
                               backgroundColor: Theme.of(context).primaryColor,
-                              duration: Duration(seconds: 2),
+                              duration: const Duration(seconds: 3),
 
                             )
                         );
                       }
                     },
-                    child: Text(
+                    child: const Text(
                       "Esqueci minha senha",
                       textAlign: TextAlign.right,
                     ),
@@ -131,7 +131,7 @@ Widget build(BuildContext context) {
                       borderRadius: BorderRadiusGeometry.circular(6.0),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     "Entrar",
                     style: TextStyle(fontSize: 18.0, color: Colors.white),
                   ),
@@ -151,7 +151,7 @@ void _onSuccess(){
 }
 
 void _onFail(){
-  ScaffoldMessenger.of(context).showSnackBar(
+  ScaffoldMessenger.of(context).showSnackBar(const
       SnackBar(content: Text("Falha ao Entrar!"),
         backgroundColor: Colors.redAccent,
         duration: Duration(seconds: 2),

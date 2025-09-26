@@ -15,23 +15,23 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return PageView(
       controller: _pageController,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       children: <Widget>[
        Scaffold(
-         body: HomeTab(),
+         body: const HomeTab(),
          drawer: CustomDrawer(pageController: _pageController),
-         floatingActionButton: CartButton(),
+         floatingActionButton: const CartButton(),
        ),
         Scaffold(
           appBar: AppBar(
-            title: Text("Produtos", style: TextStyle(color: Colors.white),),
+            title: const Text("Produtos", style: TextStyle(color: Colors.white),),
             backgroundColor: Theme.of(context).primaryColor,
             iconTheme: IconThemeData(color: Colors.white),
             centerTitle: true,
           ),
           drawer: CustomDrawer(pageController: _pageController),
-          body: ProductsTab(),
-          floatingActionButton: CartButton(),
+          body: const ProductsTab(),
+          floatingActionButton: const CartButton(),
         ),
         Container(color: Colors.yellow,),
         Container(color: Colors.green,),

@@ -23,7 +23,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Criar Conta", style: TextStyle(color: Colors.white)),
+        title: const Text("Criar Conta", style: TextStyle(color: Colors.white)),
         iconTheme: IconThemeData(color: Colors.white),
         centerTitle: true,
         backgroundColor: Theme
@@ -34,7 +34,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: ScopedModelDescendant<UserModel>(
         builder: (context, child, model) {
           if(model.isLoading) {
-            return Center(child: CircularProgressIndicator(),);
+            return const Center(child: CircularProgressIndicator(),);
           }
           return Form(
             key: _formKey,
@@ -43,7 +43,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: <Widget>[
                 TextFormField(
                   controller: _nameController,
-                  decoration: InputDecoration(hintText: "Nome Completo"),
+                  decoration: const InputDecoration(hintText: "Nome Completo"),
                   keyboardType: TextInputType.emailAddress,
                   validator: (text) {
                     if (text!.isEmpty) {
@@ -53,10 +53,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                   },
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 TextFormField(
                   controller: _emailController,
-                  decoration: InputDecoration(hintText: "E-mail"),
+                  decoration: const InputDecoration(hintText: "E-mail"),
                   keyboardType: TextInputType.emailAddress,
                   validator: (text) {
                     if (text!.isEmpty || !text.contains("@")) {
@@ -66,7 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                   },
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 TextFormField(
                   controller: _passController,
                   decoration: InputDecoration(hintText: "Senha"),
@@ -120,7 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               borderRadius: BorderRadiusGeometry.circular(6.0)
                           )
                       ),
-                      child: Text("Criar Conta",
+                      child: const Text("Criar Conta",
                         style: TextStyle(
                             fontSize: 18.0,
                             color: Colors.white
@@ -138,9 +138,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
   void _onSuccess(){
    ScaffoldMessenger.of(context).showSnackBar(
-     SnackBar(content: Text("Usuário criado com sucesso!"),
+     SnackBar(content: const Text("Usuário criado com sucesso!"),
        backgroundColor: Theme.of(context).primaryColor,
-       duration: Duration(seconds: 2),
+       duration: const Duration(seconds: 3),
 
      )
    );
@@ -152,9 +152,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void _onFail(){
     ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Falha ao criar usuário!"),
+        SnackBar(content: const Text("Falha ao criar usuário!"),
           backgroundColor: Colors.redAccent,
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 3),
 
         )
     );

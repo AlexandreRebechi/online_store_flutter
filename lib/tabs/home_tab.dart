@@ -27,14 +27,14 @@ class HomeTab extends StatelessWidget {
         _buildBodyBack(),
         CustomScrollView(
           slivers: <Widget>[
-            SliverAppBar(
+           const SliverAppBar(
               floating: true,
               snap: true,
               backgroundColor: Colors.transparent,
               iconTheme: IconThemeData(color: Colors.white),
               elevation: 0.0,
               flexibleSpace: FlexibleSpaceBar(
-                title: const Text("Novidades" ,style: TextStyle(color: Colors.white),),
+                title: Text("Novidades" ,style: TextStyle(color: Colors.white),),
                 centerTitle: true,
               ),
             ),

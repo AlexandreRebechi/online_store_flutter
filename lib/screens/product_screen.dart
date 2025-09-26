@@ -109,7 +109,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     }).toList(),
                   ),
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 SizedBox(
                   height: 44.0,
                   child: ElevatedButton(
@@ -120,8 +120,6 @@ class _ProductScreenState extends State<ProductScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0)
                       )
-
-
 
                     ),
                     //widget função do botão
@@ -138,12 +136,12 @@ class _ProductScreenState extends State<ProductScreen> {
                         CartModel.of(context).addCartItem(cartProduct);
 
                         Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context)=>CartScreen())
+                            MaterialPageRoute(builder: (context)=> const CartScreen())
                         );
 
                       } else {
                         Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context)=>LoginScreen())
+                          MaterialPageRoute(builder: (context)=> const LoginScreen())
                         );
                       }
 
@@ -151,18 +149,18 @@ class _ProductScreenState extends State<ProductScreen> {
                     //widget texto do botão
                     child: Text(
                       UserModel.of(context).isLoggedIn() ? "Adicionar ao Carrinho" : "Entre para Comprar",
-                      style: TextStyle(fontSize: 18.0, color: Colors.white),
+                      style: const TextStyle(fontSize: 18.0, color: Colors.white),
                     ),
                   ),
                 ),
-                SizedBox(height: 16.0,),
-                Text(
+                const SizedBox(height: 16.0,),
+                const Text(
                   "Descrição",
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+                  style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
                 ),
                 Text(
                   product.description!,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16.0
                   ),
                 )

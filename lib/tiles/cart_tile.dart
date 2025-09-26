@@ -10,15 +10,16 @@ class CartTile extends StatelessWidget {
   final CartProduct product;
 
 
-
   @override
   Widget build(BuildContext context) {
 
-    Widget _buildContent(){
+    Widget buildContent(){
+      CartModel.of(context).updatePrices();
+
       return Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Container(
+          SizedBox(
             width: 120.0,
             child: Image.network(
               product.productData!.images![0],
@@ -99,16 +100,16 @@ class CartTile extends StatelessWidget {
           builder: (context, snapshot){
             if(snapshot.hasData){
               product.productData = ProductData.fromDocument(snapshot.data!);
-              return _buildContent();
+              return buildContent();
             } else {
               return Container(
                 height: 70.0,
-                child: CircularProgressIndicator(),
                 alignment: Alignment.center,
+                child: CircularProgressIndicator(),
               );
             }
           }
-      ) : _buildContent(),
+      ) : buildContent(),
     );
   }
 }
