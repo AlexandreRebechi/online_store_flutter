@@ -61,6 +61,7 @@ Aplicativo de e-commerce desenvolvido em **Flutter**, com **backend em Firebase*
 | **scoped_model** | Gerenciamento de estado global do aplicativo |
 | **firebase_auth** | Autenticação de usuários |
 | **url_launcher** | Abertura de links externos (telefone e Google Maps) |
+| **flutter_launcher_icons** | Icon para Android e iOS |
 
 ---
 
