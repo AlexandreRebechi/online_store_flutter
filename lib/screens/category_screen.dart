@@ -6,18 +6,20 @@ import 'package:online_store/tiles/product_tile.dart';
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({super.key, required this.snapshot});
 
+  //documento vai indicar qual é o id e título da categoria
   final DocumentSnapshot snapshot;
 
   @override
   Widget build(BuildContext context) {
+    //para mudas de tabs (em lista ou em grade)
     return DefaultTabController(
-      length: 2,
+      length: 2, //numero de tabs
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
           title: Text(
             snapshot.get("title"),
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white), //cor da tab atual
           ),
           centerTitle: true,
           iconTheme: IconThemeData(color: Colors.white),
@@ -30,6 +32,7 @@ class CategoryScreen extends StatelessWidget {
           ),
         ),
         body: FutureBuilder<QuerySnapshot>(
+          //recebendo todos os documentos da categoria itens
           future: FirebaseFirestore.instance
               .collection("products_online_store")
               .doc(snapshot.id)
@@ -37,25 +40,35 @@ class CategoryScreen extends StatelessWidget {
               .get(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
+              //se não tem dados
               return const Center(child: CircularProgressIndicator());
             } else {
+              //se tiver
               return TabBarView(
+                //coloca o que quer ver em cada uma das tabs em ordem
                 physics: NeverScrollableScrollPhysics(),
+                //não poder arrastar para o lado
                 children: [
                   GridView.builder(
                     padding: const EdgeInsets.all(4.0),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 4.0,
-                      crossAxisSpacing: 4.0,
-                      childAspectRatio: 0.65,
-                    ),
+                    //gridDelegate controla o tamanho e a posição dos itens, quantos itens quer em cada eixo
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, //2 itens na horizontal
+                          mainAxisSpacing: 4.0,
+                          crossAxisSpacing: 4.0,
+                          childAspectRatio:
+                              0.65, //divisão da altura pela largura do item
+                        ),
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
+                      //passa cada documento atraves do index, tranforma em um objeto, passa para o ProductTile
                       ProductData data = ProductData.fromDocument(
                         snapshot.data!.docs[index],
                       );
-                      data.category = this.snapshot.id;
+                      data.category = this
+                          .snapshot
+                          .id; //passando a catergoria do documento(produto)
                       return ProductTile(type: "grid", product: data);
                     },
                   ),

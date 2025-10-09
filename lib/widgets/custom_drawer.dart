@@ -7,6 +7,7 @@ import 'package:scoped_model/scoped_model.dart';
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key, required this.pageController});
 
+  //para controlar as páginas pelo drawer
   final PageController pageController;
 
   @override
@@ -20,6 +21,7 @@ class CustomDrawer extends StatelessWidget {
         ),
       ),
     );
+    //drawer é a barra lateral de opções aberta no botão sanduíche
     return Drawer(
       child: Stack(
         children: <Widget>[
@@ -31,6 +33,7 @@ class CustomDrawer extends StatelessWidget {
                 margin: EdgeInsets.only(bottom: 8.0),
                 padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 8.0),
                 height: 170.0,
+                //stack pra alinhar as coisas onde quiser no container
                 child: Stack(
                   children: [
                     Positioned(
@@ -61,8 +64,9 @@ class CustomDrawer extends StatelessWidget {
                               ),
                               GestureDetector(
                                 child: Text(
-                                  !model.isLoggedIn() ? "Entre ou cadastre-se >"
-                                  : "Sair",
+                                  !model.isLoggedIn()
+                                      ? "Entre ou cadastre-se >"
+                                      : "Sair",
                                   style: TextStyle(
                                     color: Theme.of(context).primaryColor,
                                     fontSize: 16.0,
@@ -70,12 +74,12 @@ class CustomDrawer extends StatelessWidget {
                                   ),
                                 ),
                                 onTap: () {
-                                  if(!model.isLoggedIn())
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => LoginScreen(),
-                                    ),
-                                  );
+                                  if (!model.isLoggedIn())
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => LoginScreen(),
+                                      ),
+                                    );
                                   else
                                     model.signOut();
                                 },
@@ -93,7 +97,9 @@ class CustomDrawer extends StatelessWidget {
                 icon: Icons.home,
                 text: "Início",
                 pageController: pageController,
-                page: 0,
+                //para controlar as páginas dentro do item
+                page:
+                    0, //para o tile saber qual é sua página. (Elas estarão em ordem no home_screem, iniciando no 0.)
               ),
               DrawerTile(
                 icon: Icons.list,

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-//import 'package:online_store/datas/cart_product.dart';
-//import 'package:online_store/datas/product_data.dart';
 import 'package:online_store/models/cart_model.dart';
 import 'package:online_store/models/user_model.dart';
 import 'package:online_store/screens/home_screen.dart';
@@ -23,12 +21,16 @@ class MyApp extends StatelessWidget {
           return Container();
         }
         if (asyncSnapshot.connectionState == ConnectionState.done) {
+          //tudo o que tiver abaixo do ScopedModel, vai ter acesso ao UserModel()
+          //e vai ser modificado caso alguma coisa aconteça no UserModel()
           return ScopedModel<UserModel>(
+            //para que quando mude o usuário, mude o carrinho também
             model: UserModel(),
             child: ScopedModelDescendant<UserModel>(
-              builder: (context, child, model){
+              //ScopedModel para acessar o carrinho
+              builder: (context, child, model) {
                 return ScopedModel<CartModel>(
-                  model: CartModel(user: model),
+                  model: CartModel(user: model), //enviando o usuário atual
                   child: MaterialApp(
                     title: "Flutter's Clothing",
                     theme: ThemeData(

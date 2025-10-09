@@ -11,9 +11,12 @@ class ProductTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context)=>ProductScreen(product: product,))
+          //abrindo tela de produto
+          MaterialPageRoute(
+            builder: (context) => ProductScreen(product: product),
+          ),
         );
       },
       child: Card(
@@ -52,7 +55,7 @@ class ProductTile extends StatelessWidget {
             : Row(
                 children: <Widget>[
                   Flexible(
-                    flex: 1,
+                    flex: 1, //proporção do tamanho que quer ocupar
                     child: Image.network(
                       product.images![0],
                       fit: BoxFit.cover,

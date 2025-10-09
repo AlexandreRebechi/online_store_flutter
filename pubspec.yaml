@@ -39,7 +39,7 @@ dependencies:
   cloud_firestore: ^6.0.0
   firebase_analytics: ^12.0.0
   firebase_messaging: ^16.0.0
-  another_carousel_pro: ^1.0.2
+  carousel_slider: ^5.1.1
   transparent_image: ^2.0.1
   scoped_model: ^2.0.0
   path_provider: ^2.1.5

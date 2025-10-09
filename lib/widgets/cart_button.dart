@@ -8,6 +8,7 @@ class CartButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
+        //abrir tela do carrinho
         Navigator.of(
           context,
         ).push(MaterialPageRoute(builder: (context) => CartScreen()));

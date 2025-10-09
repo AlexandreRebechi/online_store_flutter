@@ -9,6 +9,7 @@ class ShipCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      //tile que pode clicar e ela irá expandir
       child: ExpansionTile(
         title: Text(
           "Cálcular Frete",
@@ -27,10 +28,13 @@ class ShipCard extends StatelessWidget {
                 border: OutlineInputBorder(),
                 hintText: "Digite seu CEP",
               ),
+              //inicia com um cupom já colocado, senão coloca vazio
               initialValue: "",
+              //ao submeter o cupom, busca no firestore o doc correspondente
               onFieldSubmitted: (String cepDigitado) async {
                 try {
                   http.Response response = await http.get(
+                    // consumindo api viacep
                     Uri.parse("https://viacep.com.br/ws/$cepDigitado/json/"),
                   );
                   print(response.body);

@@ -6,8 +6,9 @@ import 'package:online_store/datas/cart_product.dart';
 import 'package:online_store/models/user_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+//para acessar os dados de todo o app, usa o ScopedModel<nomedomodel> no main
 class CartModel extends Model {
-  UserModel user;
+  UserModel user; //usuário atual
 
   List<CartProduct> products = [];
 
@@ -16,8 +17,12 @@ class CartModel extends Model {
 
   bool isLoading = false;
 
+  //outra forma para ter acesso ao CartModel de qualquer lugar do App: usar CartModel.of(context).
+  //que vai buscar um objeto do tipo CartModel na árvore
   CartModel({required this.user}) {
     if (user.isLoggedIn()) {
+      //se estiver logado
+      //carrega os itens do firebase no carrinho
       _loadCartItems();
     }
   }
@@ -26,7 +31,7 @@ class CartModel extends Model {
       ScopedModel.of<CartModel>(context);
 
   void addCartItem(CartProduct cartProduct) {
-    products.add(cartProduct);
+    products.add(cartProduct); //adiconando produtos ao carrinho
 
     FirebaseFirestore.instance
         .collection("users_online_store")
@@ -34,6 +39,7 @@ class CartModel extends Model {
         .collection("cart")
         .add(cartProduct.toMap())
         .then((doc) {
+          //pegando o id do cart
           cartProduct.cid = doc.id;
         });
 
@@ -42,6 +48,7 @@ class CartModel extends Model {
 
   void removeCartItem(CartProduct cartProduct) {
     try {
+      //tirando produtos do carrinho
       FirebaseFirestore.instance
           .collection("users_online_store")
           .doc(user.firebaseUser!.uid)
@@ -57,8 +64,9 @@ class CartModel extends Model {
   }
 
   void decProduct(CartProduct cartProduct) {
+    //decrementa a quantidade
     cartProduct.quantity = cartProduct.quantity! - 1;
-
+    //atualiza o firebase
     FirebaseFirestore.instance
         .collection("users_online_store")
         .doc(user.firebaseUser!.uid)
@@ -70,8 +78,9 @@ class CartModel extends Model {
   }
 
   void incProduct(CartProduct cartProduct) {
+    //atualiza o firebase
     cartProduct.quantity = cartProduct.quantity! + 1;
-
+    //atualiza o firebase
     FirebaseFirestore.instance
         .collection("users_online_store")
         .doc(user.firebaseUser!.uid)
@@ -108,6 +117,7 @@ class CartModel extends Model {
   }
 
   double getShipPrice() {
+    //calcula o frete
     double? altura = 5.0;
     double? largura = 10.0;
     double? comprimento = 10.0;
@@ -121,7 +131,7 @@ class CartModel extends Model {
     return frete;
   }
 
-  Future<String?> finishOrder() async{
+  Future<String?> finishOrder() async {
     if (products.isEmpty) return null;
 
     isLoading = true;
@@ -131,49 +141,60 @@ class CartModel extends Model {
     double shipPrice = getShipPrice();
     double discount = getDiscount();
 
-    DocumentReference refOrder = 
-        await FirebaseFirestore.instance.collection('orders_online_store').add({
+    //adicionando o pedido na coleção orders e obtendo uma referêcia para este pedido para salvar ele no usuário depois
+    DocumentReference refOrder = await FirebaseFirestore.instance
+        .collection('orders_online_store')
+        .add({
           'clientId': user.firebaseUser!.uid,
-          'products': products.map((cartProduct) => cartProduct.toMap()).toList(),
+          //trasforma uma lista de CartProducts em uma lista de mapas
+          'products': products
+              .map((cartProduct) => cartProduct.toMap())
+              .toList(),
           'shipPrice': shipPrice,
           'productsPrice': productsPrice,
           'discount': discount,
-          'total Price': productsPrice - discount - shipPrice,
-          "status": 1
+          'totalPrice': (productsPrice - discount - shipPrice).toStringAsFixed(2,),
+          "status": 1, //status do pedido (1) -> preparando, (2) -> enviando, ... etc
         });
 
-   await FirebaseFirestore.instance.collection("users_online_store").doc(user.firebaseUser!.uid)
-        .collection("orders").doc(refOrder.id).set({
-      "orderId": refOrder.id
-    });
-   
-   QuerySnapshot query = await FirebaseFirestore.instance.collection("users_online_store").doc(user.firebaseUser!.uid)
-       .collection("cart").get();
+    //salvando referência do pedido no usuário
+    await FirebaseFirestore.instance
+        .collection("users_online_store")
+        .doc(user.firebaseUser!.uid)
+        .collection("orders")
+        .doc(refOrder.id)
+        .set({"orderId": refOrder.id});
 
-   for(DocumentSnapshot doc in query.docs){
-     doc.reference.delete();
-   }
+    //pegando todos os itens do carrinho
+    QuerySnapshot query = await FirebaseFirestore.instance
+        .collection("users_online_store")
+        .doc(user.firebaseUser!.uid)
+        .collection("cart")
+        .get();
+    //pegando uma referência para cada um dos produtos do carrinho e deletando
+    for (DocumentSnapshot doc in query.docs) {
+      doc.reference.delete();
+    }
 
-   products.clear();
+    products.clear(); //limpando lista local
 
-   couponCode = null;
-   discountPercentage = 0;
+    couponCode = null;
+    discountPercentage = 0;
 
-   isLoading = false;
-   notifyListeners();
+    isLoading = false;
+    notifyListeners();
 
-   return refOrder.id;
-
-
+    return refOrder.id;
   }
 
   void _loadCartItems() async {
+    //carregando todos os documentos(itens) do carrinho
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("users_online_store")
-        .doc(user!.firebaseUser!.uid)
+        .doc(user.firebaseUser!.uid)
         .collection("cart")
         .get();
-
+    //transforma cada documento retornado do firebae em um CartProduct
     products = querySnapshot.docs
         .map((doc) => CartProduct.fromDocument(doc))
         .toList();

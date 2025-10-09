@@ -8,10 +8,7 @@ class OrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Pedido Realizado"),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text("Pedido Realizado"), centerTitle: true),
       body: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(16),
@@ -19,27 +16,19 @@ class OrderScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Icon(
-              Icons.check,
-              color: Theme.of(context).primaryColor,
-              size: 80,
-            ),
+            Icon(Icons.check, color: Theme.of(context).primaryColor, size: 80),
             const Text(
               'Pedido realizado com sucesso!',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               textAlign: TextAlign.center,
             ),
-            Text('Código do pedido $orderId',
-              style: const TextStyle(
-                fontSize: 16,
-              ),
+            Text(
+              'Código do pedido $orderId',
+              style: const TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
             ),
           ],
-        )
+        ),
       ),
     );
   }

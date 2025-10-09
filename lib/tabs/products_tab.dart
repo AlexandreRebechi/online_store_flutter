@@ -8,23 +8,27 @@ class ProductsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<QuerySnapshot>(
-        future: FirebaseFirestore.instance.collection("products_online_store").get(),
-        builder: (context, snapshot){
-          if(!snapshot.hasData){
-            return Center(child: CircularProgressIndicator(),);
-          } else {
-
-            var dividedTiles = ListTile.divideTiles(tiles: snapshot.data!.docs.map((docs){
+      //pegando as categorias da coleção produtos
+      future: FirebaseFirestore.instance
+          .collection("products_online_store")
+          .get(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          //para dividir as tiles, pega as tiles, passa a cor e transforma em lista depois
+          var dividedTiles = ListTile.divideTiles(
+            //pega cada documento/ cada documento se torna um CategoryTile
+            // transforma todos os CategoryTile em uma lista
+            tiles: snapshot.data!.docs.map((docs) {
               return CategoryTile(snapshot: docs);
-            }
-            ).toList(),
-            color: Colors.grey[500]).toList();
+            }).toList(),
+            color: Colors.grey[500],
+          ).toList();
 
-            return ListView(
-              children: dividedTiles,
-            );
-          }
+          return ListView(children: dividedTiles);
         }
+      },
     );
   }
 }

@@ -5,25 +5,29 @@ import 'package:online_store/screens/category_screen.dart';
 class CategoryTile extends StatelessWidget {
   const CategoryTile({super.key, required this.snapshot});
 
+  //pega o ducumento da categoria
   final DocumentSnapshot snapshot;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      //leading é a parte que fica no início
       leading: CircleAvatar(
         radius: 25.0,
         backgroundColor: Colors.transparent,
         backgroundImage: NetworkImage(snapshot.get("icon")),
       ),
       title: Text(snapshot.get("title")),
+      //trailing é a parte que fica no fim
       trailing: Icon(Icons.keyboard_arrow_right),
-      onTap: (){
+      onTap: () {
+        //vai para a tela CategoryScreen passando o snapshot (documento)
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context)=>CategoryScreen(snapshot: snapshot,))
+          MaterialPageRoute(
+            builder: (context) => CategoryScreen(snapshot: snapshot),
+          ),
         );
-
       },
-
     );
   }
 }

@@ -10,14 +10,13 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  //para acessar o formulário
+  final _formKey = GlobalKey<FormState>();
+
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
   final _addressController = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +25,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
         title: const Text("Criar Conta", style: TextStyle(color: Colors.white)),
         iconTheme: IconThemeData(color: Colors.white),
         centerTitle: true,
-        backgroundColor: Theme
-            .of(context)
-            .primaryColor,
-
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: ScopedModelDescendant<UserModel>(
         builder: (context, child, model) {
-          if(model.isLoading) {
-            return const Center(child: CircularProgressIndicator(),);
+          if (model.isLoading) {
+            return const Center(child: CircularProgressIndicator());
           }
           return Form(
             key: _formKey,
@@ -79,7 +75,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                   },
                 ),
-                SizedBox(height: 16.0,),
+                SizedBox(height: 16.0),
                 TextFormField(
                   controller: _addressController,
                   decoration: InputDecoration(hintText: "Endereço"),
@@ -91,75 +87,70 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                   },
                 ),
-                SizedBox(height: 16.0,),
+                SizedBox(height: 16.0),
                 SizedBox(
                   height: 44.0,
                   child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
+                    onPressed: () {
+                      //pedindo para validar os campos
+                      if (_formKey.currentState!.validate()) {
+                        Map<String, dynamic> userData = {
+                          //senha não pode ser armazenada junto com as informações
+                          "nome": _nameController.text,
+                          "email": _emailController.text,
+                          "address": _addressController.text,
+                        };
 
-                          Map<String, dynamic> userData = {
-                            "nome": _nameController.text,
-                            "email": _emailController.text,
-                            "address": _addressController.text,
-                          };
-
-                          model.signUp(
-                              userData: userData,
-                              pass: _passController.text,
-                              onSuccess: _onSuccess,
-                              onFail: _onFail
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme
-                              .of(context)
-                              .primaryColor,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadiusGeometry.circular(6.0)
-                          )
+                        model.signUp(
+                          userData: userData,
+                          pass: _passController.text,
+                          onSuccess: _onSuccess,
+                          onFail: _onFail,
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.circular(6.0),
                       ),
-                      child: const Text("Criar Conta",
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.white
-                        ),
-                      )
+                    ),
+                    child: const Text(
+                      "Criar Conta",
+                      style: TextStyle(fontSize: 18.0, color: Colors.white),
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           );
         },
-
       ),
     );
   }
-  void _onSuccess(){
-   ScaffoldMessenger.of(context).showSnackBar(
-     SnackBar(content: const Text("Usuário criado com sucesso!"),
-       backgroundColor: Theme.of(context).primaryColor,
-       duration: const Duration(seconds: 3),
 
-     )
-   );
-   Future.delayed(Duration(seconds: 2)).then((_){
-     Navigator.of(context).pop();
-   });
-
+  void _onSuccess() {
+    //acessando o sacaffold
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text("Usuário criado com sucesso!"),
+        backgroundColor: Theme.of(context).primaryColor,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+    Future.delayed(Duration(seconds: 2)).then((_) {
+      //sair da tela de cadastro
+      Navigator.of(context).pop();
+    });
   }
 
-  void _onFail(){
+  void _onFail() {
     ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: const Text("Falha ao criar usuário!"),
-          backgroundColor: Colors.redAccent,
-          duration: const Duration(seconds: 3),
-
-        )
+      SnackBar(
+        content: const Text("Falha ao criar usuário!"),
+        backgroundColor: Colors.redAccent,
+        duration: const Duration(seconds: 3),
+      ),
     );
-
   }
 }
-
-

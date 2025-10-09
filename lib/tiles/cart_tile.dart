@@ -9,13 +9,13 @@ class CartTile extends StatelessWidget {
 
   final CartProduct product;
 
-
   @override
   Widget build(BuildContext context) {
-
-    Widget buildContent(){
-      CartModel.of(context).updatePrices();
-
+    Widget buildContent() {
+      CartModel.of(
+        context,
+      ).updatePrices(); //quando carregar os produtos, vai pedir para atualizar os preços no cart_price.dart
+      ///mostra informações dos itens
       return Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -27,89 +27,99 @@ class CartTile extends StatelessWidget {
             ),
           ),
           Expanded(
-              child: Container(
-                padding: EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      product.productData!.title!,
-                      style: TextStyle(fontWeight: FontWeight.w500, fontSize: 17.0),
+            child: Container(
+              padding: EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    product.productData!.title!,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 17.0,
                     ),
-                    Text(
-                        "Tamanho ${product.size}",
-                        style: TextStyle(fontWeight: FontWeight.w300),
+                  ),
+                  Text(
+                    "Tamanho ${product.size}",
+                    style: TextStyle(fontWeight: FontWeight.w300),
+                  ),
+                  Text(
+                    "R\$ ${product.productData!.price!.toStringAsFixed(2)}",
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Text(
-                      "R\$ ${product.productData!.price!.toStringAsFixed(2)}",
-                      style: TextStyle(
+                  ),
+                  Row(
+                    children: <Widget>[
+                      IconButton(
+                        onPressed: product.quantity! > 1
+                            ? () {
+                                CartModel.of(context).decProduct(product);
+                              }
+                            : null, //desebilita caso for menor que 1
+                        icon: Icon(Icons.remove),
                         color: Theme.of(context).primaryColor,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold
                       ),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        IconButton(
-                            onPressed: product.quantity! > 1 ? (){
-                              CartModel.of(context).decProduct(product);
-                            } : null,
-                            icon: Icon(Icons.remove),
-                            color: Theme.of(context).primaryColor
+                      Text(product.quantity.toString()),
+                      IconButton(
+                        onPressed: () {
+                          CartModel.of(context).incProduct(product);
+                        },
+                        icon: Icon(Icons.add),
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          //remove todos
+                          CartModel.of(context).removeCartItem(product);
+                        },
+                        child: Text(
+                          "Remover",
+                          style: TextStyle(color: Colors.grey[500]),
                         ),
-                        Text(product.quantity.toString()),
-                        IconButton(
-                            onPressed: (){
-                              CartModel.of(context).incProduct(product);
-
-                            },
-                            icon: Icon(Icons.add),
-                            color: Theme.of(context).primaryColor
-
-                        ),
-                        TextButton(
-                            onPressed: (){
-                              CartModel.of(context).removeCartItem(product);
-
-
-                            },
-                            child: Text("Remover", style: TextStyle(color: Colors.grey[500]),),
-
-                        )
-                      ],
-                    )
-
-                  ],
-                ),
-              )
-          )
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       );
-
     }
+
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      child: product.productData == null ? FutureBuilder<DocumentSnapshot>(
-          future: FirebaseFirestore.instance
-              .collection("products_online_store")
-              .doc(product.category)
-              .collection("itens")
-              .doc(product.pid)
-              .get(),
-          builder: (context, snapshot){
-            if(snapshot.hasData){
-              product.productData = ProductData.fromDocument(snapshot.data!);
-              return buildContent();
-            } else {
-              return Container(
-                height: 70.0,
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(),
-              );
-            }
-          }
-      ) : buildContent(),
+      child: product.productData == null
+          ? FutureBuilder<DocumentSnapshot>(
+              //caso ainda não tenha os dados, recarrega os itens
+              future: FirebaseFirestore.instance
+                  .collection("products_online_store")
+                  .doc(product.category)
+                  .collection("itens")
+                  .doc(product.pid)
+                  .get(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  //salva os dados para mostrar depois
+                  product.productData = ProductData.fromDocument(
+                    snapshot.data!,
+                  );
+                  return buildContent(); //mostra os itens
+                } else {
+                  return Container(
+                    height: 70.0,
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+              //caso já tenha os dados, mostra os itens
+            )
+          : buildContent(),
     );
   }
 }
