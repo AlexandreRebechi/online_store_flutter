@@ -85,7 +85,7 @@ Aplicativo de e-commerce desenvolvido em **Flutter**, com **backend em Firebase*
 ---
 
 ## 👨‍💻 Autor
-Desenvolvido por **[Seu Nome]**  
+Desenvolvido por Alexandre Rebechi
 💬 Entre em contato no [LinkedIn](www.linkedin.com/in/alexandre-rebechi-b65106346) ou contribua com o projeto via pull request.
 
 ---
