@@ -153,7 +153,7 @@ class CartModel extends Model {
           'shipPrice': shipPrice,
           'productsPrice': productsPrice,
           'discount': discount,
-          'totalPrice': (productsPrice - discount - shipPrice).toStringAsFixed(2,),
+          'totalPrice': (productsPrice - discount + shipPrice),
           "status": 1, //status do pedido (1) -> preparando, (2) -> enviando, ... etc
         });
 
