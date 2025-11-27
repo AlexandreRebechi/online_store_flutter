@@ -70,7 +70,7 @@ class OrderTile extends StatelessWidget {
       text +=
           "${p["quantity"]} x ${p["product"]["title"]} (R\$ ${p["product"]["price"].toStringAsFixed(2)})\n";
     }
-    text += "Total: R\$ ${snapshot.get("totalPrice")}";
+    text += "Total: R\$ ${snapshot.get("totalPrice").toStringAsFixed(2)}";
 
     return text;
   }
