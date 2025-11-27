@@ -9,7 +9,7 @@ import 'package:scoped_model/scoped_model.dart';
 //para acessar os dados de todo o app, usa o ScopedModel<nomedomodel> no main
 class CartModel extends Model {
   UserModel user; //usuário atual
-
+ 
   List<CartProduct> products = [];
 
   String? couponCode;
